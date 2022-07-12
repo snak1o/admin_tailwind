@@ -83,7 +83,7 @@
 
 <script>
 
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "Products",
@@ -92,10 +92,10 @@ export default {
       products: [],
     }
   },
-  async mounted() {
-    const res = await axios.get('/api/product/all/')
-    this.products = res.data
-  },
+  // async mounted() {
+  //   const res = await axios.get('/api/product/all/')
+  //   this.products = res.data
+  // },
   methods: {
     addZero(num) {
       if (num < 10) {

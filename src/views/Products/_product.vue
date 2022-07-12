@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "_product",
@@ -13,8 +13,8 @@ export default {
     }
   },
   async mounted() {
-    const res = await axios.get('/api/product/byId/' + this.$route.params.id)
-    this.product = res.data
+    // const res = await axios.get('/api/product/byId/' + this.$route.params.id)
+    // this.product = res.data
   }
 }
 </script>

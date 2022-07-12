@@ -17,6 +17,7 @@ import Orders from "@/views/Orders";
 import Categories from "@/views/Categories/index";
 import AllCategories from "@/views/Categories/All";
 import EditCategory from "@/views/Categories/_category";
+import Login from "@/views/Login";
 
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/categories',

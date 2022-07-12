@@ -1,16 +1,21 @@
 <template>
-  <Sidebar/>
-  <router-view class="w-5/6 flex-1 float-right p-5"/>
+  <component v-bind:is="layout"></component>
 </template>
 
 <script>
-import Sidebar from "@/components/Sidebar";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import EmptyLayout from '@/layouts/EmptyLayout';
 
 export default {
   components: {
-    Sidebar,
+    DefaultLayout,
+    EmptyLayout
   },
-
+  computed: {
+    layout() {
+      return this.$store.getters.layout
+    }
+  }
 }
 </script>
 
