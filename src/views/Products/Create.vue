@@ -22,6 +22,19 @@
     </div>
 
     <div class="flex flex-col mb-2">
+      <label class="text-gray-600 mb-1" for="tags">Теги товара</label>
+      <input id="tags" v-model="currentTag" @keydown.enter="addTag" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required/>
+      <ul v-if="tags.length !== 0" class="flex mt-2">
+        <li v-for="(tag, index) in tags" :key="tag" class="mr-2 bg-blue-500 rounded px-5 text-white relative group">
+          {{tag}}
+          <svg @click="tags.splice(index, 1)" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 absolute right-0.5 top-1.5 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex flex-col mb-2">
       <label class="text-gray-600 mb-1" for="sku">Номер товара (SKU)</label>
       <input type="text" id="sku" v-model="sku" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 outline-none" required/>
     </div>
@@ -37,12 +50,12 @@
         </svg>
         <div class="flex text-sm text-gray-600">
           <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-            <span>Upload a file</span>
+            <span>Загрузите файл</span>
             <input id="file-upload" name="file-upload" type="file" class="sr-only">
           </label>
-          <p class="pl-1">or drag and drop</p>
+          <p class="pl-1">или перенесите</p>
         </div>
-        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+        <p class="text-xs text-gray-500">PNG, JPG, WEBP до 10MB</p>
       </div>
     </div>
   <button @click="createProduct" class="px-8 py-2 mt-2 bg-green-700 rounded-md text-white">Создать товар</button>
@@ -59,6 +72,7 @@ export default {
       title: "",
       desc: "",
       price: null,
+      currentTag: "",
       sku: "",
       tags: [],
       colors: [{name: "fff", hex: "fff"}]
@@ -69,6 +83,10 @@ export default {
       const res = await axios.post('/api/product/create/', {title: this.title, description: this.desc, price: this.price, pictures: ['fff'], colors: this.colors, sku: this.sku})
       await this.$router.push('/products')
       console.log(res)
+    },
+    addTag(){
+      this.tags.push(this.currentTag)
+      this.currentTag = ""
     }
   }
 }
