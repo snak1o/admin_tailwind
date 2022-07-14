@@ -18,6 +18,7 @@ import Categories from "@/views/Categories/index";
 import AllCategories from "@/views/Categories/All";
 import EditCategory from "@/views/Categories/_category";
 import Login from "@/views/Login";
+import Colors from "@/views/Colors";
 
 
 const routes = [
@@ -63,6 +64,11 @@ const routes = [
       {path: '/users', component: AllUsers},
       {path: '/users/edit/:id', component: EditUser }
     ]
+  },
+  {
+    path: '/colors',
+    name: 'Colors',
+    component: Colors
   },
   {
     path: '/:pathMatch(.*)*',
