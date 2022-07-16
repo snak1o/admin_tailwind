@@ -2,10 +2,7 @@
   <div>
     <h1 class="text-3xl">Информация</h1>
     <div class="grid grid-cols-4 gap-10 pt-10">
-      <StatsCard :class="classList[item - 1]" v-for="item in 4" :key="item">
-        <template #count>1000</template>
-        <template #title>Пользователи</template>
-      </StatsCard>
+      <StatsCard :class="classList[item - 1]" v-for="item in 4" :key="item" title="Пользователи" count="1000" day-count="100"/>
     </div>
   </div>
 
