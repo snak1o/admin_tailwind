@@ -47,7 +47,7 @@
           Apple street 1 A 10, 00920 Helsinki
         </td>
         <td class="px-6 py-4 text-right">
-          <router-link :to="'/products/edit/'" class="font-medium text-blue-600 hover:underline">Edit</router-link>
+          <router-link to="/users/edit/1" class="font-medium text-blue-600 hover:underline">Edit</router-link>
         </td>
       </tr>
       </tbody>
