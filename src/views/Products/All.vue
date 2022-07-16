@@ -1,9 +1,18 @@
 <template>
   <div class="flex h-full flex-col">
   <div class="flex justify-between items-center">
-    <h1 class="text-3xl">Продукты</h1>
+    <h1 class="text-3xl">Товары</h1>
     <router-link v-if="products.length > 0" to="/products/create" class="text-green-700 text-md">+ Добавить новый</router-link>
   </div>
+    <div class="flex w-full mt-5">
+      <input type="text" class="w-full border rounded p-2 mr-3 outline-none" placeholder="Поиск" v-model="searchValue" />
+      <select class="border rounded p-2 mr-3 outline-none" v-model="searchOption">
+        <option value="id">ID</option>
+        <option value="sku">SKU</option>
+        <option value="category">Категория</option>
+      </select>
+      <button class="px-8 py-2 bg-green-600 rounded-md text-white">Найти</button>
+    </div>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5" v-if="products.length > 0">
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -73,14 +82,14 @@
           <span v-else>-</span>
         </td>
         <td class="px-6 py-4 text-right">
-          <router-link :to="'/products/edit/' + product._id" class="font-medium text-blue-600 hover:underline">Edit</router-link>
+          <router-link :to="'/products/edit/' + product.id" class="font-medium text-blue-600 hover:underline">Edit</router-link>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
   <div v-else class="flex flex-col items-center h-full justify-center">
-   <span class="text-xl">Нет продуктов для показа</span>
+   <span class="text-xl">Нет товаров для показа</span>
     <button class="px-8 py-2 mt-7 bg-green-700 rounded-md text-white" @click="$router.push('/products/create')">Добавить</button>
   </div>
   </div>
@@ -95,6 +104,8 @@ export default {
   data() {
     return {
       products: [],
+      searchOption: "id",
+      searchValue: "",
     }
   },
   // async mounted() {
