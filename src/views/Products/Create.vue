@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <h1 class="text-2xl mb-5">Создать продукт</h1>
+  <section class="pb-5">
+    <h1 class="text-2xl mb-5">Создать товар</h1>
     <div class="flex justify-between">
       <div class="w-3/6 mr-5">
         <div class="flex flex-col mb-2">
@@ -15,12 +15,7 @@
 
         <div class="flex flex-col mb-2">
           <label class="text-gray-600 mb-1" for="colors">Цвета</label>
-          <select  id="colors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required>
-            <option disabled selected>Выберите цвета</option>
-            <option value="blue">Blue</option>
-            <option value="black">Black</option>
-            <option value="white">White</option>
-          </select>
+          <ColorSelection id="colors" :color-selected="colorIds" @selectColor="selectColor" @removeColor="removeColor"/>
         </div>
 
         <div class="flex flex-col mb-2">
@@ -42,27 +37,16 @@
         </div>
 
         <div class="flex flex-col mb-2">
-          <label class="text-gray-600 mb-1" for="price">Цена товара (€)</label>
-          <input type="number" min="1" v-model="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 outline-none" required/>
+          <label class="text-gray-600 mb-1" for="price">Цена товара (€), включая ндс {{(price + price * 0.24).toFixed(2)}}</label>
+          <input type="number" min="1"  v-model="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 outline-none" required/>
         </div>
-        <div class="mt-5 mb-5 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-          <div class="space-y-1 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="flex text-sm text-gray-600">
-              <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                <span>Загрузите файл</span>
-                <input id="file-upload" name="file-upload" type="file" class="sr-only">
-              </label>
-              <p class="pl-1">или перенесите</p>
-            </div>
-            <p class="text-xs text-gray-500">PNG, JPG, WEBP до 10MB</p>
-          </div>
-        </div>
+       <UploadFile />
       <button @click="createProduct" class="px-8 py-2 mt-2 bg-green-700 rounded-md text-white">Создать товар</button>
       </div>
-      <PhotoPreview class="w-3/6 ml-5" :selected="selectedPhotos" @add="selectPhoto" @remove="removePhoto"/>
+      <div class="flex flex-col w-3/6 ml-5">
+        <label class="text-gray-600 mb-1" for="photo">Фотографии</label>
+        <PhotoPreview  id="photo" :selected="selectedPhotos" @add="selectPhoto" @remove="removePhoto"/>
+      </div>
     </div>
   </section>
 </template>
@@ -71,18 +55,21 @@
 // import axios from "axios";
 
 import PhotoPreview from "@/components/PhotoPreview";
+import UploadFile from "@/components/UploadFile";
+import ColorSelection from "@/components/ColorSelection";
 export default {
   name: "Create",
-  components: {PhotoPreview},
+  components: {ColorSelection, UploadFile, PhotoPreview},
   data() {
     return {
       title: "",
       desc: "",
-      price: null,
+      price: 0,
       currentTag: "",
       sku: "",
       tags: [],
-      colors: [{name: "fff", hex: "fff"}],
+      colors: [],
+      colorIds: [],
       selectedPhotos: [],
     }
   },
@@ -93,8 +80,10 @@ export default {
       // console.log(res)
     },
     addTag(){
-      this.tags.push(this.currentTag)
-      this.currentTag = ""
+      if (this.currentTag !== "") {
+        this.tags.push(this.currentTag)
+        this.currentTag = ""
+      }
     },
     selectPhoto(value) {
       this.selectedPhotos.push(value)
@@ -103,6 +92,23 @@ export default {
       let index = this.selectedPhotos.indexOf(value)
       if (index >= 0) {
         this.selectedPhotos.splice(index, 1)
+      }
+    },
+    selectColor(value) {
+      this.colors.push(value)
+      this.colorIds.push(value.id)
+    },
+    removeColor(value) {
+      let selectedIndex = this.colorIds.indexOf(value.id)
+      let index
+      for (let i in this.colors) {
+        if (this.colors[i].id === value.id) {
+          index = i
+        }
+      }
+      if (selectedIndex >= 0 && index >= 0) {
+        this.colorIds.splice(selectedIndex, 1)
+        this.colors.splice(index, 1)
       }
     }
   }
