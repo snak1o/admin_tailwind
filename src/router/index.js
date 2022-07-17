@@ -17,7 +17,10 @@ import Orders from "@/views/Orders";
 import Categories from "@/views/Categories/index";
 import AllCategories from "@/views/Categories/All";
 import EditCategory from "@/views/Categories/_category";
+import CreateCategory from "@/views/Categories/Create";
+//login
 import Login from "@/views/Login";
+//colors
 import Colors from "@/views/Colors";
 
 
@@ -38,7 +41,8 @@ const routes = [
     component: Categories,
     children: [
       {path: '/categories', component: AllCategories},
-      {path: '/categories/edit/:id', component: EditCategory }
+      {path: '/categories/edit/:id', component: EditCategory },
+      {path: '/categories/create', component: CreateCategory }
     ]
   },
   {
