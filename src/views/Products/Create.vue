@@ -5,17 +5,24 @@
       <div class="w-3/6 mr-5">
         <div class="flex flex-col mb-2">
           <label class="text-gray-600 mb-1" for="title">Название товара</label>
-          <input type="text" v-model="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required/>
+          <input type="text" v-model="name" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required/>
         </div>
 
         <div class="flex flex-col mb-2">
           <label class="text-gray-600 mb-1" for="desc">Описание товара</label>
-          <textarea id="desc" v-model="desc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required/>
+          <textarea id="desc" v-model="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" required/>
         </div>
 
         <div class="flex flex-col mb-2">
           <label class="text-gray-600 mb-1" for="colors">Цвета</label>
-          <ColorSelection id="colors" :color-selected="colorIds" @selectColor="selectColor" @removeColor="removeColor"/>
+          <ColorSelection id="colors" :color-selected="selectedColors" @selectColor="selectColor" @removeColor="removeColor"/>
+        </div>
+
+        <div class="flex flex-col mb-2">
+          <label class="text-gray-600 mb-1" for="category">Категория</label>
+          <select name="category" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" v-model="selectedCategory">
+            <option v-for="category in categories" :value="category.id" :key="category.id">{{category.name}}</option>
+          </select>
         </div>
 
         <div class="flex flex-col mb-2">
@@ -37,7 +44,7 @@
         </div>
 
         <div class="flex flex-col mb-2">
-          <label class="text-gray-600 mb-1" for="price">Цена товара (€), включая ндс {{(price + price * 0.24).toFixed(2)}}</label>
+          <label class="text-gray-600 mb-1" for="price">Цена товара (€), без ндс {{(price - (price * 0.1935)).toFixed(2)}}</label>
           <input type="number" min="1"  v-model="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 outline-none" required/>
         </div>
        <UploadFile />
@@ -45,39 +52,95 @@
       </div>
       <div class="flex flex-col w-3/6 ml-5">
         <label class="text-gray-600 mb-1" for="photo">Фотографии</label>
-        <PhotoPreview  id="photo" :selected="selectedPhotos" @add="selectPhoto" @remove="removePhoto"/>
+        <PhotoPreview id="photo" :selected="selectedPhotos" @add="selectPhoto" @remove="removePhoto"/>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-// import axios from "axios";
-
 import PhotoPreview from "@/components/PhotoPreview";
 import UploadFile from "@/components/UploadFile";
 import ColorSelection from "@/components/ColorSelection";
+import axios from "axios";
+import store from "@/store";
+
+
 export default {
   name: "Create",
   components: {ColorSelection, UploadFile, PhotoPreview},
   data() {
     return {
-      title: "",
-      desc: "",
+      name: "",
+      description: "",
       price: 0,
       currentTag: "",
       sku: "",
       tags: [],
-      colors: [],
-      colorIds: [],
+      selectedCategory: null,
+      categories: [],
+      selectedColors: [],
       selectedPhotos: [],
     }
   },
+  async mounted() {
+    const categories = await axios.get(process.env.VUE_APP_API + '/api/v1/categories/')
+    this.categories = categories.data
+  },
   methods: {
     async createProduct() {
-      // const res = await axios.post('/api/product/create/', {title: this.title, description: this.desc, price: this.price, pictures: ['fff'], colors: this.colors, sku: this.sku})
-      // await this.$router.push('/products')
-      // console.log(res)
+      if (this.validateProduct()) {
+        try {
+          const res = await axios.post(process.env.VUE_APP_API + '/api/v1/items/create',{
+            name: this.name,
+            description: this.description,
+            categoryId: 1,
+            colors: this.selectedColors,
+            price: this.price,
+            sku: this.sku,
+            images: this.selectedPhotos,
+            tags: this.tags
+          })
+          if (res.status === 200) {
+            await store.dispatch('addNotification', "Продукт успешно создан.")
+          }
+        }catch (err) {
+          await store.dispatch('addNotification', `Ошибка ${err.response.status}.`)
+        }
+      }
+    },
+    validateProduct() {
+      if (this.name.trim() === "") {
+        store.dispatch('addNotification', "Название продукта не может быть пустым.")
+        return false
+      }
+      if (this.description.trim() === "") {
+        store.dispatch('addNotification', "Описание продукта не может быть пустым.")
+        return false
+      }
+      if (this.selectedColors.length === 0) {
+        store.dispatch('addNotification', "Выберите хотя бы один цвет.")
+        return false
+      }
+      if (this.selectedPhotos.length === 0) {
+        store.dispatch('addNotification', "Выберите хотя бы одну фотографию.")
+        return false
+      }
+      if (this.selectedCategory === null) {
+        store.dispatch('addNotification', "Выберите категорию продукта.")
+        return false
+      }
+      if (this.sku === "") {
+        store.dispatch('addNotification', "Уникальный номер товара не может быть пустым.")
+        return false
+      }
+      if (typeof(this.price) !== 'number' || this.price <= 0) {
+        store.dispatch('addNotification', "Цена должна быть больше нуля.")
+        return false
+      }
+      else {
+        return true
+      }
     },
     addTag(){
       if (this.currentTag !== "") {
@@ -95,20 +158,14 @@ export default {
       }
     },
     selectColor(value) {
-      this.colors.push(value)
-      this.colorIds.push(value.id)
+      console.log(value)
+      this.selectedColors.push(value)
     },
     removeColor(value) {
-      let selectedIndex = this.colorIds.indexOf(value.id)
-      let index
-      for (let i in this.colors) {
-        if (this.colors[i].id === value.id) {
-          index = i
+      for (let i in this.selectedColors) {
+        if (this.selectedColors[i] === value){
+          this.selectedColors.splice(parseInt(i), 1)
         }
-      }
-      if (selectedIndex >= 0 && index >= 0) {
-        this.colorIds.splice(selectedIndex, 1)
-        this.colors.splice(index, 1)
       }
     }
   }
