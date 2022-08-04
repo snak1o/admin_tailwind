@@ -7,7 +7,7 @@
       <div class="flex text-sm text-gray-600">
         <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
           <span>Загрузите файл</span>
-          <input id="file-upload" name="file-upload" type="file" class="sr-only">
+          <input id="file-upload" name="file-upload" type="file" ref="file" @change="handleFile" class="sr-only">
         </label>
         <p class="pl-1">или перенесите</p>
       </div>
@@ -17,8 +17,32 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from '@/store'
+
 export default {
-  name: "UploadFile"
+  name: "UploadFile",
+  data() {
+    return {
+      file: "",
+    }
+  },
+  methods: {
+    async uploadFile() {
+      let formData = new FormData()
+      formData.append('photo', this.file)
+      await axios.post(process.env.VUE_APP_API + '/api/v1/images/', formData)
+      await store.dispatch('updatePhotos')
+      this.file = ""
+    },
+    handleFile() {
+      this.file = this.$refs.file.files[0];
+      if (this.file !== undefined) {
+        this.uploadFile()
+      }
+
+    }
+  }
 }
 </script>
 
