@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+//store
+import store from '../store/index'
+
 //Dashboard
 import Home from '../views/Home.vue'
 //Users
@@ -21,7 +24,10 @@ import CreateCategory from "@/views/Categories/Create";
 //login
 import Login from "@/views/Login";
 //colors
-import Colors from "@/views/Colors";
+import Colors from "@/views/colors/index";
+import AllColors from "@/views/colors/All"
+import CreateColor from '@/views/colors/Create';
+import EditColor from '@/views/colors/_color';
 
 
 const routes = [
@@ -72,7 +78,12 @@ const routes = [
   {
     path: '/colors',
     name: 'Colors',
-    component: Colors
+    component: Colors,
+    children: [
+      {path: '/colors', component: AllColors},
+      {path: '/colors/create', component: CreateColor},
+      {path: '/colors/edit/:id', component: EditColor},
+    ]
   },
   {
     path: '/:pathMatch(.*)*',
@@ -83,6 +94,11 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'Login' && !store.getters['loggedIn']) next({ name: 'Login'})
+  else next()
 })
 
 export default router
