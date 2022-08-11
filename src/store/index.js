@@ -1,10 +1,9 @@
 import { createStore } from 'vuex'
 import axios from "axios";
-
 export default createStore({
   state: {
     layout: 'DefaultLayout',
-    loggedIn: true,
+    loggedIn: false,
     images: [],
     notifications: [],
   },
@@ -20,6 +19,9 @@ export default createStore({
     },
     removeNotification(state) {
       state.notifications.shift()
+    },
+    setLoggedIn(state, payload) {
+      state.loggedIn = payload
     }
   },
   getters: {
@@ -38,7 +40,11 @@ export default createStore({
   },
   actions: {
     async updatePhotos({commit}) {
-      const {data} = await axios.get(process.env.VUE_APP_API + '/api/v1/images/')
+      const {data} = await axios.get('/api/v1/images/', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
       commit('setImages', data)
     },
     addNotification(context, notification) {
