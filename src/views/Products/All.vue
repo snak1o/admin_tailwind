@@ -39,7 +39,7 @@
           SKU
         </th>
         <th scope="col" class="px-6 py-3">
-          Обновлено
+          Создано
         </th>
         <th scope="col" class="px-6 py-3">
           Теги
@@ -50,34 +50,34 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="bg-white border-b" v-for="product in products.slice().reverse()" :key="product._id">
+      <tr class="bg-white border-b" v-for="product in products.slice().reverse()" :key="product.id">
         <td class="px-6 py-4">
-          <input type="checkbox"/>
+          <input type="checkbox" :value="product.id" @click="handleSelection"/>
         </td>
         <td class="px-6 py-4">
-          {{product._id}}
+          {{product.id}}
         </td>
         <td class="px-6 py-4">
-          <img src="" alt="Image">
+          <img class="max-h-24" :src="url + product.images[0].filename" alt="Image">
         </td>
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {{product.title}}
+          {{product.name}}
         </th>
         <td class="px-6 py-4">
-          {{product.category ? product.category : '-'}}
+          {{product.category.name}}
         </td>
         <td class="px-6 py-4">
-          {{product.price.toFixed(2)}}€
+          {{product.price}}€
         </td>
         <td class="px-6 py-4">
           {{product.sku}}
         </td>
         <td class="px-6 py-4">
-          {{getDate(product.updatedAt)}}
+          {{product.createdAt}}
         </td>
         <td class="px-6 py-4">
-          <div  v-if="product.tags.length > 0">
-            <span v-for="(tag, index) in product.tags" :key="tag">{{tag}}{{index === product.tags.length - 1 ? '' : ', '}}</span>
+          <div  v-if="product.tags">
+            <span v-for="(tag, index) in product.tags" :key="tag">{{tag.name}}{{index === product.tags.length - 1 ? '' : ', '}}</span>
           </div>
           <span v-else>-</span>
         </td>
