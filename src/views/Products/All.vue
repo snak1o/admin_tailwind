@@ -96,9 +96,6 @@
 </template>
 
 <script>
-
-// import axios from "axios";
-
 export default {
   name: "Products",
   async mounted() {
@@ -112,10 +109,6 @@ export default {
       searchValue: "",
     }
   },
-  // async mounted() {
-  //   const res = await axios.get('/api/product/all/')
-  //   this.products = res.data
-  // },
   methods: {
     addZero(num) {
       if (num < 10) {
@@ -123,11 +116,6 @@ export default {
       }
       return num
     },
-    getDate(isoDate) {
-      let date = new Date(isoDate)
-      let newDate = this.addZero(date.getDate()) + '.' + this.addZero(date.getMonth() + 1)  + '.' + date.getFullYear() + ' ' + this.addZero(date.getHours()) + ':' + this.addZero(date.getMinutes()) + ':' + this.addZero(date.getSeconds())
-      return newDate
-    }
   }
 }
 </script>
