@@ -58,7 +58,6 @@
 import UploadFile from "@/components/UploadFile";
 import PhotoPreview from "@/components/PhotoPreview";
 import ColorSelection from "@/components/ColorSelection";
-import axios from "axios";
 import store from "@/store";
 
 export default {
@@ -77,10 +76,10 @@ export default {
     }
   },
   async mounted() {
-    const product = await axios.get(process.env.VUE_APP_API + '/api/v1/items/' + this.$route.params.id)
+    const product = await this.$axios.get('/api/v1/items/' + this.$route.params.id)
     this.product = product.data
 
-    const categories = await axios.get(process.env.VUE_APP_API + '/api/v1/categories/')
+    const categories = await this.$axios.get('/api/v1/categories/')
     this.categories = categories.data
 
     for (let i in this.product.colors) {
@@ -109,7 +108,7 @@ export default {
       if (this.validateProduct()) {
         let price = parseFloat((this.priceAlv - (this.priceAlv * 0.1935)).toFixed(2))
         try {
-          const res = await axios.put(process.env.VUE_APP_API + '/api/v1/items/' + this.product.id, {
+          const res = await this.$axios.put('/api/v1/items/' + this.product.id, {
             categoryId: this.selectedCategory,
             colors: this.selectedColors,
             description: this.product.description,

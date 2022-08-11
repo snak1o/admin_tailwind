@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import store from '@/store'
 
 export default {
@@ -31,7 +30,7 @@ export default {
     async uploadFile() {
       let formData = new FormData()
       formData.append('photo', this.file)
-      await axios.post(process.env.VUE_APP_API + '/api/v1/images/', formData)
+      await this.$axios.post('/api/v1/images/', formData)
       await store.dispatch('updatePhotos')
       this.file = ""
     },

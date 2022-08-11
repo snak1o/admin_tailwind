@@ -20,7 +20,7 @@
 
         <div class="flex flex-col mb-2">
           <label class="text-gray-600 mb-1" for="category">Категория</label>
-          <select name="category" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" v-model="selectedCategory">
+          <select name="category"  id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" v-model="selectedCategory">
             <option v-for="category in categories" :value="category.id" :key="category.id">{{category.name}}</option>
           </select>
         </div>
@@ -62,7 +62,6 @@
 import PhotoPreview from "@/components/PhotoPreview";
 import UploadFile from "@/components/UploadFile";
 import ColorSelection from "@/components/ColorSelection";
-import axios from "axios";
 import store from "@/store";
 
 
@@ -84,17 +83,17 @@ export default {
     }
   },
   async mounted() {
-    const categories = await axios.get(process.env.VUE_APP_API + '/api/v1/categories/')
+    const categories = await this.$axios.get('/api/v1/categories/')
     this.categories = categories.data
   },
   methods: {
     async createProduct() {
       if (this.validateProduct()) {
         try {
-          const res = await axios.post(process.env.VUE_APP_API + '/api/v1/items/create',{
+          const res = await this.$axios.post('/api/v1/items/create',{
             name: this.name,
             description: this.description,
-            categoryId: 1,
+            categoryId: this.selectedCategory,
             colors: this.selectedColors,
             price: this.price,
             sku: this.sku,

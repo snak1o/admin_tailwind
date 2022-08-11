@@ -9,13 +9,11 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "ColorSelection",
   props: ['colorSelected'],
   async mounted() {
-    const res = await axios.get(process.env.VUE_APP_API + '/api/v1/colors/')
+    const res = await this.$axios.get('/api/v1/colors/')
     this.colors = res.data
   },
   data() {
