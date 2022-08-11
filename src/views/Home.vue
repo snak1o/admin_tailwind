@@ -18,6 +18,8 @@ import StatsCard from "@/components/StatsCard";
 export default {
   name: 'Home',
   components: {StatsCard},
-
+  mounted() {
+    this.$store.commit('setLayout', 'DefaultLayout')
+  },
 }
 </script>
