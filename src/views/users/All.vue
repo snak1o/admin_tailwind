@@ -11,6 +11,9 @@
           ID
         </th>
         <th scope="col" class="px-6 py-3">
+          логин
+        </th>
+        <th scope="col" class="px-6 py-3">
           Имя
         </th>
         <th scope="col" class="px-6 py-3">
@@ -26,28 +29,30 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="bg-white border-b" >
-<!--        v-for="user in users.slice().reverse()" :key="user.id"-->
+      <tr class="bg-white border-b" v-for="user in users.slice().reverse()" :key="user.id">
         <td class="px-6 py-4">
           <input type="checkbox"/>
         </td>
         <td class="px-6 py-4">
-          1
+          {{user.id}}
+        </td>
+        <td class="px-6 py-4" :class="user.admin ? 'text-red-500' : ''">
+          {{user.login}}
         </td>
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          Ruslan Lysenko
+          {{user.firstName ? user.firstName + " " + user.lastName : '-'}}
         </th>
         <td class="px-6 py-4">
-          snakwcs@gmail.com
+          {{user.email}}
         </td>
         <td class="px-6 py-4">
-          +358452614228
+          {{user.phone ? "+" + user.phone : '-'}}
         </td>
         <td class="px-6 py-4">
-          Apple street 1 A 10, 00920 Helsinki
+          {{user.invoiceAddress ? user.invoiceAddress.street + " " + user.invoiceAddress.zip + " " + user.invoiceAddress.city : "-"}}
         </td>
         <td class="px-6 py-4 text-right">
-          <router-link to="/users/edit/1" class="font-medium text-blue-600 hover:underline">Edit</router-link>
+          <router-link :to="`/users/edit/${user.id}`" class="font-medium text-blue-600 hover:underline">Edit</router-link>
         </td>
       </tr>
       </tbody>
@@ -57,7 +62,16 @@
 
 <script>
 export default {
-  name: "Users"
+  name: "Users",
+  data() {
+    return {
+      users: [],
+    }
+  },
+  async mounted() {
+    const res = await this.$axios.get('/api/v1/users/all')
+    this.users = res.data
+  }
 }
 </script>
 
