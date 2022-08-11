@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-//store
-import store from '../store/index'
-
 //Dashboard
 import Home from '../views/Home.vue'
 //Users
@@ -28,13 +25,20 @@ import Colors from "@/views/colors/index";
 import AllColors from "@/views/colors/All"
 import CreateColor from '@/views/colors/Create';
 import EditColor from '@/views/colors/_color';
+//Images
+import Images from "@/views/Images";
+//Delivery
+import Delivery from "@/views/Delivery/index"
+import AllDelivery from '@/views/Delivery/All'
+import CreateDelivery from '@/views/Delivery/Create'
+import EditDelivery from '@/views/Delivery/_delivery'
 
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
   },
   {
     path: '/login',
@@ -86,6 +90,21 @@ const routes = [
     ]
   },
   {
+    path: '/images',
+    name: 'Images',
+    component: Images,
+  },
+  {
+    path: '/delivery',
+    name: 'Delivery',
+    component: Delivery,
+    children: [
+      {path: '/delivery', component: AllDelivery},
+      {path: '/delivery/create', component: CreateDelivery},
+      {path: '/delivery/edit/:id', component: EditDelivery},
+    ],
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/'
   }
@@ -97,8 +116,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'Login' && !store.getters['loggedIn']) next({ name: 'Login'})
-  else next()
+  if (to.name !== 'Login' && !localStorage.getItem('token')) {
+    next({
+      name: 'Login'
+    })
+  } else {
+    next()
+  }
 })
 
 export default router
