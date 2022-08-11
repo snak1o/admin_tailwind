@@ -101,6 +101,10 @@
 
 export default {
   name: "Products",
+  async mounted() {
+    const res = await this.$axios.get('/api/v1/items/all')
+    this.products = res.data
+  },
   data() {
     return {
       products: [],
