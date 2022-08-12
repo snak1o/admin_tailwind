@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
   name: "_delivery",
   data() {
@@ -29,16 +31,21 @@ export default {
   },
   async mounted() {
     const res = await this.$axios.get('/api/v1/delivery/' + this.$route.params.id)
-    this.delivery = res.data
+    if (res.data) {
+      this.delivery = res.data
+    }
   },
   methods: {
     async updateDelivery() {
       this.delivery.price = 10
-      await this.$axios.put('/api/v1/delivery/' + this.delivery.id, {
+      const res = await this.$axios.put('/api/v1/delivery/' + this.delivery.id, {
         companyName: this.delivery.companyName,
         name: this.delivery.name,
         price: this.delivery.price
       })
+      if (res.status === 200) {
+        await store.dispatch('addNotification', `Доставка #${this.delivery.id} обновлена успешно.`)
+      }
     }
   }
 }
