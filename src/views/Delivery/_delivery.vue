@@ -37,14 +37,33 @@ export default {
   },
   methods: {
     async updateDelivery() {
-      this.delivery.price = 10
-      const res = await this.$axios.put('/api/v1/delivery/' + this.delivery.id, {
-        companyName: this.delivery.companyName,
-        name: this.delivery.name,
-        price: this.delivery.price
-      })
-      if (res.status === 200) {
-        await store.dispatch('addNotification', `Доставка #${this.delivery.id} обновлена успешно.`)
+      if (this.validation()) {
+        const res = await this.$axios.put('/api/v1/delivery/' + this.delivery.id, {
+          companyName: this.delivery.companyName,
+          name: this.delivery.name,
+          price: parseInt(this.delivery.price)
+        })
+        if (res.status === 200) {
+          await store.dispatch('addNotification', `Доставка #${this.delivery.id} обновлена успешно.`)
+          await this.$router.push('/delivery')
+        }
+      }
+    },
+    validation() {
+      if (this.delivery.name.trim() === '' || this.delivery.name.trim().length < 1 || this.delivery.name.trim().length > 30) {
+        store.dispatch('addNotification', `Название доставки не может быть меньше 1 символа и больше 30.`)
+        return false
+      }
+      if (this.delivery.companyName.trim() === '' || this.delivery.companyName.trim().length < 1 || this.delivery.companyName.trim().length > 30) {
+        store.dispatch('addNotification', `Название компании не может быть меньше 1 символа и больше 30.`)
+        return false
+      }
+      if (parseInt(this.delivery.price) < 0 || !parseInt(this.delivery.price)) {
+        store.dispatch('addNotification', `Цена доставки не может быть меньше 0.`)
+        return false
+      }
+      else {
+        return true
       }
     }
   }
