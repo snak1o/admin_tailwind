@@ -24,12 +24,16 @@
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
   name: "All",
   async mounted() {
       const res = await this.$axios.get('/api/v1/delivery/all')
       console.log(res)
-      this.delivery = res.data
+      if (res.data) {
+        this.delivery = res.data
+      }
   },
   data() {
     return {
@@ -37,8 +41,16 @@ export default {
     }
   },
   methods: {
-    async deleteDelivery() {
-      await this.$axios.delete('/api/v1/delivery/1')
+    async deleteDelivery(id) {
+      const res = await this.$axios.delete('/api/v1/delivery/' + id)
+      if (res.status && res.status === 200) {
+        for (let i in this.delivery) {
+          if (this.delivery[i].id === id) {
+            await store.dispatch('addNotification', `Доставка #${id} удалена успешно.`)
+            this.delivery.splice(parseInt(i), 1)
+          }
+        }
+      }
     }
   }
 }
