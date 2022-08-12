@@ -20,13 +20,15 @@
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
   name: "Create",
   data() {
     return {
-      companyName: '4444334',
-      deliveryName: '4324242344',
-      price: 100,
+      companyName: '',
+      deliveryName: '',
+      price: 0,
     }
   },
   methods: {
@@ -36,7 +38,10 @@ export default {
         name: this.deliveryName,
         price: this.price
       })
-      console.log(res)
+      if (res.status === 200) {
+        await this.$router.push('/delivery')
+        await store.dispatch('addNotification', `Доставка #${res.data.id} создана успешно.`)
+      }
     }
   }
 }
