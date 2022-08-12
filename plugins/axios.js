@@ -9,9 +9,7 @@ instance.interceptors.response.use((config) => {
     return config
 }, async (error) => {
     const originalRequest = error.config;
-    console.log('3')
     if (error.config && error.response.status === 401 && !originalRequest._isRetry) {
-        console.log('4')
         originalRequest._isRetry = true
         try {
             const res = await axios.post('/api/v1/users/refresh')
@@ -21,6 +19,9 @@ instance.interceptors.response.use((config) => {
         } catch (e) {
             console.log(e)
         }
+    }
+    if (error.response.status === 404) {
+        history.back()
     }
 })
 if (token !== null) {
