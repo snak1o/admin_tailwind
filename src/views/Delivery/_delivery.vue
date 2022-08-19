@@ -41,7 +41,7 @@ export default {
         const res = await this.$axios.put('/api/v1/delivery/' + this.delivery.id, {
           companyName: this.delivery.companyName,
           name: this.delivery.name,
-          price: parseInt(this.delivery.price)
+          price: parseFloat(this.delivery.price)
         })
         if (res.status === 200) {
           await store.dispatch('addNotification', `Доставка #${this.delivery.id} обновлена успешно.`)
@@ -58,7 +58,7 @@ export default {
         store.dispatch('addNotification', `Название компании не может быть меньше 1 символа и больше 30.`)
         return false
       }
-      if (parseInt(this.delivery.price) < 0 || !parseInt(this.delivery.price)) {
+      if (parseFloat(this.delivery.price) < 0 || !parseFloat(this.delivery.price)) {
         store.dispatch('addNotification', `Цена доставки не может быть меньше 0.`)
         return false
       }
