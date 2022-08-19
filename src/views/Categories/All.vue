@@ -9,7 +9,7 @@
       <button class="px-8 py-2 mt-7 bg-green-700 rounded-md text-white" @click="$router.push('/categories/create')">Добавить</button>
     </div>
     <div class="grid grid-cols-4 gap-5" v-else>
-      <div class="h-28 flex flex-col justify-between border rounded-md p-2 relative" v-for="item in categories" :key="item.id">
+      <div class="h-28 flex flex-col justify-between border rounded-md border-gray-200 p-2 relative" v-for="item in categories" :key="item.id">
         <span class="text-xl">{{item.name}}</span>
         <div class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pr-1" viewBox="0 0 20 20" fill="currentColor">

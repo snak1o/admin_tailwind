@@ -9,7 +9,7 @@
       <button class="px-8 py-2 mt-7 bg-green-700 rounded-md text-white" @click="$router.push('/delivery/create')">Добавить</button>
     </div>
     <div class="grid grid-cols-2 gap-8">
-      <div v-for="item in delivery" :key="item.id"  @click="$router.push('/delivery/edit/' + item.id)" class="p-3 h-24 rounded-md border flex justify-between cursor-pointer relative group">
+      <div v-for="item in delivery" :key="item.id"  @click="$router.push('/delivery/edit/' + item.id)" class="p-3 h-24 rounded-md border border-gray-200 flex justify-between cursor-pointer relative group">
         <div class="flex flex-col h-full justify-between">
           <span class="text-xl">{{item.name}}</span>
           <span>{{item.companyName}}</span>
