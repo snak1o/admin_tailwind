@@ -1,13 +1,22 @@
 import axios from 'axios';
 
-const token = localStorage.getItem('token')
+
+axios.defaults.baseURL = process.env.VUE_APP_API
 
 const instance = axios.create({
     withCredentials: true,
 })
+
+instance.interceptors.request.use((config) => {
+    config.headers = {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+    return config
+})
+
 instance.interceptors.response.use((config) => {
     return config
-}, async (error) => {
+},async (error) => {
     const originalRequest = error.config;
     if (error.config && error.response.status === 401 && !originalRequest._isRetry) {
         originalRequest._isRetry = true
@@ -17,15 +26,15 @@ instance.interceptors.response.use((config) => {
             originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`
             return instance.request(originalRequest)
         } catch (e) {
-            console.log(e)
+            if (e.response.status === 404) {
+                localStorage.removeItem('token')
+            }
         }
     }
-    if (error.response.status === 404) {
-        history.back()
+    if (error.response) {
+        throw error
     }
 })
-if (token !== null) {
-    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-}
+
 
 export default instance
