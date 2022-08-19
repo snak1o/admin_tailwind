@@ -3,9 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 //Dashboard
 import Home from '../views/Home.vue'
 //Users
-import Users from '@/views/users/index'
-import AllUsers from '@/views/users/All'
-import EditUser from '@/views/users/_user'
+import Users from '@/views/Users/index'
+import AllUsers from '@/views/Users/All'
+import EditUser from '@/views/Users/_user'
 //Products
 import Products from "@/views/Products/index";
 import AllProducts from "@/views/Products/All";
@@ -20,11 +20,11 @@ import EditCategory from "@/views/Categories/_category";
 import CreateCategory from "@/views/Categories/Create";
 //login
 import Login from "@/views/Login";
-//colors
-import Colors from "@/views/colors/index";
-import AllColors from "@/views/colors/All"
-import CreateColor from '@/views/colors/Create';
-import EditColor from '@/views/colors/_color';
+//Colors
+import Colors from "@/views/Colors/index";
+import AllColors from "@/views/Colors/All"
+import CreateColor from '@/views/Colors/Create';
+import EditColor from '@/views/Colors/_color';
 //Images
 import Images from "@/views/Images";
 //Delivery
@@ -32,6 +32,8 @@ import Delivery from "@/views/Delivery/index"
 import AllDelivery from '@/views/Delivery/All'
 import CreateDelivery from '@/views/Delivery/Create'
 import EditDelivery from '@/views/Delivery/_delivery'
+//500 code
+import Maintenance from "@/views/Maintenance";
 
 
 const routes = [
@@ -71,22 +73,22 @@ const routes = [
     component: Orders
   },
   {
-    path: '/users',
+    path: '/Users',
     name: 'Users',
     component: Users,
     children: [
-      {path: '/users', component: AllUsers},
-      {path: '/users/edit/:id', component: EditUser }
+      {path: '/Users', component: AllUsers},
+      {path: '/Users/edit/:id', component: EditUser }
     ]
   },
   {
-    path: '/colors',
+    path: '/Colors',
     name: 'Colors',
     component: Colors,
     children: [
-      {path: '/colors', component: AllColors},
-      {path: '/colors/create', component: CreateColor},
-      {path: '/colors/edit/:id', component: EditColor},
+      {path: '/Colors', component: AllColors},
+      {path: '/Colors/create', component: CreateColor},
+      {path: '/Colors/edit/:id', component: EditColor},
     ]
   },
   {
@@ -107,7 +109,12 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/'
-  }
+  },
+  {
+    path: '/maintenance',
+    name: 'Maintenance',
+    component: Maintenance,
+  },
 ]
 
 const router = createRouter({
