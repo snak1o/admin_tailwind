@@ -10,7 +10,7 @@ const app = createApp(App)
 
 app.config.globalProperties.$axios = {...instance}
 
-axios.defaults.baseURL = process.env.VUE_APP_API
+axios.defaults.baseURL = "VUE_API_URL"
 
 app.use(store)
 

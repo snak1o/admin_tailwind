@@ -69,7 +69,7 @@ export default {
           }
         }
       }catch (e) {
-        if (e.response.status === 404) {
+	if (e.response.status === 404) {
           await store.dispatch('addNotification', `Неправильный логин или пароль`)
         }
         if (e.response.status === 500) {

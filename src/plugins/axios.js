@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-
-axios.defaults.baseURL = process.env.VUE_APP_API
+axios.defaults.baseURL = "VUE_API_URL"
 
 const instance = axios.create({
     withCredentials: true,
