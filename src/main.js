@@ -10,7 +10,7 @@ const app = createApp(App)
 
 app.config.globalProperties.$axios = {...instance}
 
-axios.defaults.baseURL = "VUE_API_URL"
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "VUE_API_URL"  : process.env.VUE_APP_API
 
 app.use(store)
 

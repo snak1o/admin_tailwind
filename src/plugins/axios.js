@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = "VUE_API_URL"
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "VUE_API_URL"  : process.env.VUE_APP_API
 
 const instance = axios.create({
     withCredentials: true,
