@@ -19,12 +19,19 @@ export default {
   },
   async mounted() {
     if (localStorage.getItem('token') && localStorage.getItem('token').length > 0) {
-        const res = await this.$axios.get('/api/v1/users/me')
-
-        if (res && res.status === 200) {
-          await store.commit('setLoggedIn', true)
+        try {
+          const res = await this.$axios.get('/api/v1/users/me')
+          if (res && res.status === 200 && res.data.admin === true) {
+            await store.commit('setLoggedIn', true)
+            if (this.$route.fullPath === '/login') {
+              await this.$router.push('/')
+            }
+          }
+        } catch (e) {
+          if (e.response && e.response.status === 500) {
+            await store.dispatch('addNotification', "Ошибка 500.")
+          }
         }
-      console.log(res)
     }
   }
 }
