@@ -35,9 +35,9 @@ export default {
             hex: this.hex,
             price: this.price
           })
-          console.log(res)
           if (res.status === 200) {
             await store.dispatch('addNotification', `Цвет ${this.name} был создан успешно.`)
+            await this.$router.push('/colors')
           }
         } catch (err) {
           await store.dispatch('addNotification', `Ошибка ${err.response.status}.`)

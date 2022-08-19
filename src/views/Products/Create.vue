@@ -102,6 +102,7 @@ export default {
           })
           if (res.status === 200) {
             await store.dispatch('addNotification', "Продукт успешно создан.")
+            await this.$router.push('/products')
           }
         }catch (err) {
           await store.dispatch('addNotification', `Ошибка ${err.response.status}.`)
@@ -157,7 +158,6 @@ export default {
       }
     },
     selectColor(value) {
-      console.log(value)
       this.selectedColors.push(value)
     },
     removeColor(value) {
