@@ -57,9 +57,9 @@ export default {
           password: this.password
         })
         if (res && res.status === 200) {
+          await localStorage.setItem('token', res.data.accessToken)
           const user = await this.$axios.get('/api/v1/users/me')
           if (user && user.status === 200 && user.data.admin) {
-            await localStorage.setItem('token', res.data.accessToken)
             await store.commit('setLoggedIn', true)
             this.$router.push('/')
           }
@@ -69,7 +69,12 @@ export default {
           }
         }
       }catch (e) {
-        console.log(e)
+        if (e.response.status === 404) {
+          await store.dispatch('addNotification', `Неправильный логин или пароль`)
+        }
+        if (e.response.status === 500) {
+          await store.dispatch('addNotification', `Server error 500.`)
+        }
       }
     }
   },
