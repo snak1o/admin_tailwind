@@ -69,11 +69,16 @@ export default {
           }
         }
       }catch (e) {
-	if (e.response.status === 404) {
-          await store.dispatch('addNotification', `Неправильный логин или пароль`)
+        if (e.response.status) {
+          if (e.response.status === 404) {
+            await store.dispatch('addNotification', `Неправильный логин или пароль.`)
+          }
+          if (e.response.status === 500) {
+            await store.dispatch('addNotification', `Server error 500.`)
+          }
         }
-        if (e.response.status === 500) {
-          await store.dispatch('addNotification', `Server error 500.`)
+        else {
+          await store.dispatch('addNotification', `Ошибка: ${e.message}.`)
         }
       }
     }
