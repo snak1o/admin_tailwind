@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
   name: "_category",
   async mounted() {
@@ -26,15 +28,36 @@ export default {
   },
   methods: {
     async updateCategory() {
-      const res = await this.$axios.put('/api/v1/categories/' + this.category.id, {
-        name: this.category.name
-      })
-      console.log(res)
+      try {
+        if (this.category.name.trim().length > 1) {
+          const res = await this.$axios.put('/api/v1/categories/' + this.category.id, {
+            name: this.category.name
+          })
+          if (res && res.status === 200) {
+            await store.dispatch('addNotification', `Категория #${this.category.id} обновлена успешно.`)
+          }
+        }else {
+          await store.dispatch('addNotification', `Название категории не может быть пустым.`)
+        }
+      } catch (e) {
+        await store.dispatch('addNotification', `Ошибка ${e.response.status}.`)
+      }
     },
     async deleteCategory() {
-      const res = await this.$axios.delete('/api/v1/categories/' + this.category.id)
-      await this.$router.push('/caregories')
-      console.log(res)
+       try {
+         const res = await this.$axios.delete('/api/v1/categories/' + this.category.id)
+         if (res && res.status === 200) {
+           await this.$router.push('/categories')
+           await store.dispatch('addNotification', `Категория #${this.category.id} удалена успешно.`)
+         }
+       }catch (e) {
+         if (e.response.status === 409) {
+           await store.dispatch('addNotification', `Категория где-то используется.`)
+         }
+         else {
+           await store.dispatch('addNotification', `Ошибка ${e.response.status}.`)
+         }
+       }
     }
   }
 }
