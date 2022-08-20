@@ -148,7 +148,7 @@ function checkAuth(to, from, next) {
     } else {
       next()
     }
-  }, 1000)
+  }, 100)
 }
 
 export default router
