@@ -51,36 +51,54 @@ export default {
   },
   methods: {
     async logIn() {
-      try {
-        const res = await axios.post('/api/v1/users/sign-in', {
-          login: this.login,
-          password: this.password
-        })
-        if (res && res.status === 200) {
-          await localStorage.setItem('token', res.data.accessToken)
-          const user = await this.$axios.get('/api/v1/users/me')
-          if (user && user.status === 200 && user.data.admin) {
-            await store.commit('setLoggedIn', true)
-            this.$router.push('/')
+      if (this.validation()) {
+        try {
+          const res = await axios.post('/api/v1/users/sign-in', {
+            login: this.login,
+            password: this.password
+          })
+          if (res && res.status === 200) {
+            await localStorage.setItem('token', res.data.accessToken)
+            const user = await this.$axios.get('/api/v1/users/me')
+            if (user && user.status === 200 && user.data.admin) {
+              await store.commit('setLoggedIn', true)
+              this.$router.push('/')
+            }
+            else {
+              localStorage.removeItem('token')
+              await store.dispatch('addNotification', `Отказано в доступе.`)
+              return false
+            }
+          }
+        }catch (e) {
+          if (e.response) {
+            if (e.response.status === 404) {
+              await store.dispatch('addNotification', `Неправильный логин или пароль.`)
+            }
+            if (e.response.status === 500) {
+              await store.dispatch('addNotification', `Server error 500.`)
+            }
+            else {
+              await store.dispatch('addNotification', `Ошибка ${e.response.status}.`)
+            }
           }
           else {
-            localStorage.removeItem('token')
-            await store.dispatch('addNotification', `Отказано в доступе.`)
-            return false
+            await store.dispatch('addNotification', `Ошибка: ${e.message}.`)
           }
         }
-      }catch (e) {
-        if (e.response) {
-          if (e.response.status === 404) {
-            await store.dispatch('addNotification', `Неправильный логин или пароль.`)
-          }
-          if (e.response.status === 500) {
-            await store.dispatch('addNotification', `Server error 500.`)
-          }
-        }
-        else {
-          await store.dispatch('addNotification', `Ошибка: ${e.message}.`)
-        }
+      }
+    },
+    validation() {
+      if (this.login.trim().length < 1) {
+        store.dispatch('addNotification', `Логин не может быть пустым.`)
+        return false
+      }
+      if (this.password.trim().length < 1) {
+        store.dispatch('addNotification', `Пароль не может быть пустым.`)
+        return false
+      }
+      else {
+        return true
       }
     }
   },
