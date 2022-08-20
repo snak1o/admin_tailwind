@@ -65,6 +65,7 @@ export default {
           }
           else {
             localStorage.removeItem('token')
+            await store.dispatch('addNotification', `Отказано в доступе.`)
             return false
           }
         }
