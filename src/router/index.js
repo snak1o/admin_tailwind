@@ -34,23 +34,26 @@ import CreateDelivery from '@/views/Delivery/Create'
 import EditDelivery from '@/views/Delivery/_delivery'
 //500 code
 import Maintenance from "@/views/Maintenance";
-
+//store
+import store from "@/store";
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+    beforeRouteEnter: checkAuth,
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
   },
   {
     path: '/categories',
     name: 'Categories',
     component: Categories,
+    beforeRouteEnter: checkAuth,
     children: [
       {path: '/categories', component: AllCategories},
       {path: '/categories/edit/:id', component: EditCategory },
@@ -61,6 +64,7 @@ const routes = [
     path: '/products',
     name: 'Products',
     component: Products,
+    beforeRouteEnter: checkAuth,
     children: [
       {path: '/products', component: AllProducts},
       {path: '/products/edit/:id', component: EditProduct },
@@ -70,12 +74,14 @@ const routes = [
   {
     path: '/orders',
     name: 'Orders',
-    component: Orders
+    component: Orders,
+    beforeRouteEnter: checkAuth,
   },
   {
     path: '/Users',
     name: 'Users',
     component: Users,
+    beforeRouteEnter: checkAuth,
     children: [
       {path: '/Users', component: AllUsers},
       {path: '/Users/edit/:id', component: EditUser }
@@ -85,6 +91,7 @@ const routes = [
     path: '/Colors',
     name: 'Colors',
     component: Colors,
+    beforeRouteEnter: checkAuth,
     children: [
       {path: '/Colors', component: AllColors},
       {path: '/Colors/create', component: CreateColor},
@@ -95,11 +102,13 @@ const routes = [
     path: '/images',
     name: 'Images',
     component: Images,
+    beforeRouteEnter: checkAuth,
   },
   {
     path: '/delivery',
     name: 'Delivery',
     component: Delivery,
+    beforeRouteEnter: checkAuth,
     children: [
       {path: '/delivery', component: AllDelivery},
       {path: '/delivery/create', component: CreateDelivery},
@@ -122,14 +131,23 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'Login' && !localStorage.getItem('token')) {
-    next({
-      name: 'Login'
-    })
+// router.beforeEach((to, from, next) => {
+//   if (to.name !== 'Login' && !localStorage.getItem('token')) {
+//     next({
+//       name: 'Login'
+//     })
+//   } else {
+//     next()
+//   }
+// })
+function checkAuth(to, from, next) {
+  if (!store.getters['loggedIn']) {
+    console.log(store.getters['loggedIn'])
+    next('/login')
+
   } else {
     next()
   }
-})
+}
 
 export default router
