@@ -141,13 +141,14 @@ const router = createRouter({
 //   }
 // })
 function checkAuth(to, from, next) {
-  if (!store.getters['loggedIn']) {
-    console.log(store.getters['loggedIn'])
-    next('/login')
-
-  } else {
-    next()
-  }
+  setTimeout(() => {
+    if (!store.getters['loggedIn']) {
+      console.log(store.getters['loggedIn'])
+      next('/login')
+    } else {
+      next()
+    }
+  }, 1000)
 }
 
 export default router
