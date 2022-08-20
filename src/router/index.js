@@ -140,15 +140,26 @@ const router = createRouter({
 //     next()
 //   }
 // })
-function checkAuth(to, from, next) {
-  setTimeout(() => {
-    if (!store.getters['loggedIn']) {
-      console.log(store.getters['loggedIn'])
-      next('/login')
-    } else {
-      next()
+// setTimeout(() => {
+//   if (!store.getters['loggedIn']) {
+//     console.log(store.getters['loggedIn'])
+//     next('/login')
+//   } else {
+//     next()
+//   }
+// }, 100)
+async function checkAuth(to, from, next) {
+  if (localStorage.getItem('token') && localStorage.getItem('token').length > 0) {
+    try {
+      const res = await this.$axios.get('/api/v1/users/me')
+      if (res && res.status === 200 && res.data.admin === true) {
+        await store.commit('setLoggedIn', true)
+        next()
+      }
+    } catch (e) {
+      next('Login')
     }
-  }, 100)
+  }
 }
 
 export default router
