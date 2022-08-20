@@ -62,6 +62,7 @@ export default {
             const user = await this.$axios.get('/api/v1/users/me')
             if (user && user.status === 200 && user.data.admin) {
               await store.commit('setLoggedIn', true)
+              this.password = this.login = ""
               this.$router.push('/')
             }
             else {
