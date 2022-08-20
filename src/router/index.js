@@ -42,7 +42,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
   },
   {
     path: '/login',
@@ -53,7 +53,7 @@ const routes = [
     path: '/categories',
     name: 'Categories',
     component: Categories,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
     children: [
       {path: '/categories', component: AllCategories},
       {path: '/categories/edit/:id', component: EditCategory },
@@ -64,7 +64,7 @@ const routes = [
     path: '/products',
     name: 'Products',
     component: Products,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
     children: [
       {path: '/products', component: AllProducts},
       {path: '/products/edit/:id', component: EditProduct },
@@ -75,13 +75,13 @@ const routes = [
     path: '/orders',
     name: 'Orders',
     component: Orders,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
   },
   {
     path: '/Users',
     name: 'Users',
     component: Users,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
     children: [
       {path: '/Users', component: AllUsers},
       {path: '/Users/edit/:id', component: EditUser }
@@ -91,7 +91,7 @@ const routes = [
     path: '/Colors',
     name: 'Colors',
     component: Colors,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
     children: [
       {path: '/Colors', component: AllColors},
       {path: '/Colors/create', component: CreateColor},
@@ -102,13 +102,13 @@ const routes = [
     path: '/images',
     name: 'Images',
     component: Images,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
   },
   {
     path: '/delivery',
     name: 'Delivery',
     component: Delivery,
-    beforeRouteEnter: checkAuth,
+    beforeEnter: [checkAuth],
     children: [
       {path: '/delivery', component: AllDelivery},
       {path: '/delivery/create', component: CreateDelivery},
