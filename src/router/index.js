@@ -36,6 +36,7 @@ import EditDelivery from '@/views/Delivery/_delivery'
 import Maintenance from "@/views/Maintenance";
 //store
 import store from "@/store";
+import $axios from '@/plugins/axios'
 
 const routes = [
   {
@@ -131,34 +132,23 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.name !== 'Login' && !localStorage.getItem('token')) {
-//     next({
-//       name: 'Login'
-//     })
-//   } else {
-//     next()
-//   }
-// })
-// setTimeout(() => {
-//   if (!store.getters['loggedIn']) {
-//     console.log(store.getters['loggedIn'])
-//     next('/login')
-//   } else {
-//     next()
-//   }
-// }, 100)
 async function checkAuth(to, from, next) {
   if (localStorage.getItem('token') && localStorage.getItem('token').length > 0) {
     try {
-      const res = await this.$axios.get('/api/v1/users/me')
+      const res = await $axios.get('/api/v1/users/me')
       if (res && res.status === 200 && res.data.admin === true) {
         await store.commit('setLoggedIn', true)
         next()
       }
+      else {
+        return next('/login')
+      }
     } catch (e) {
-      next('Login')
+      return next('/login')
     }
+  }
+  else{
+    return next('/login')
   }
 }
 
