@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import axios from "axios";
+import axios from "@/plugins/axios";
 
 export default createStore({
   state: {
@@ -7,6 +7,7 @@ export default createStore({
     loggedIn: false,
     images: [],
     notifications: [],
+    host: process.env.NODE_ENV === "production" ? "VUE_API_URL"  : process.env.VUE_APP_API,
   },
   mutations: {
     setLayout(state, payload) {
@@ -37,6 +38,9 @@ export default createStore({
     },
     notifications(state) {
       return state.notifications
+    },
+    host(state) {
+      return state.host
     }
   },
   actions: {
