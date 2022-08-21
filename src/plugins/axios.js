@@ -20,7 +20,9 @@ instance.interceptors.response.use((config) => {
     if (error.config && error.response.status === 401 && !originalRequest._isRetry) {
         originalRequest._isRetry = true
         try {
-            const res = await axios.post('/api/v1/users/refresh')
+            const res = await axios.post('/api/v1/users/refresh', {}, {
+                withCredentials: true
+            })
             localStorage.setItem('token', res.data.accessToken)
             originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`
             return instance.request(originalRequest)
