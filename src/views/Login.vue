@@ -56,6 +56,8 @@ export default {
           const res = await axios.post('/api/v1/users/sign-in', {
             login: this.login,
             password: this.password
+           }, {
+            withCredentials: true
           })
           if (res && res.status === 200) {
             await localStorage.setItem('token', res.data.accessToken)
