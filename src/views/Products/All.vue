@@ -87,7 +87,7 @@
           {{product.id}}
         </td>
         <td class="px-6 py-1 h-20">
-          <img class="max-h-24 h-full" :src="url + product.images[0].filename" alt="Image" v-if="product.images">
+          <img class="max-h-24 h-full" :src="$store.getters['host'] + product.images[0].filename" alt="Image" v-if="product.images">
           <span v-else>no images</span>
         </td>
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
@@ -156,7 +156,6 @@ export default {
       sortOrder: 'desc',
       isDesk: true,
       debounce: null,
-      url: process.env.VUE_APP_API,
     }
   },
   computed: {
