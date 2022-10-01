@@ -100,7 +100,7 @@ export default {
             images: this.selectedPhotos,
             tags: this.tags
           })
-          if (res.status === 200) {
+          if (res.status === 201) {
             await store.dispatch('addNotification', "Продукт успешно создан.")
             await this.$router.push('/products')
           }
