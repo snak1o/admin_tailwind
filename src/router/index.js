@@ -12,7 +12,9 @@ import AllProducts from "@/views/Products/All";
 import EditProduct from "@/views/Products/_product";
 import CreateProduct from "@/views/Products/Create"
 //Orders
-import Orders from "@/views/Orders";
+import Orders from "@/views/Orders/index";
+import AllOrders from "@/views/Orders/All";
+import ViewOrder from "@/views/Orders/_order";
 //Categories
 import Categories from "@/views/Categories/index";
 import AllCategories from "@/views/Categories/All";
@@ -77,6 +79,10 @@ const routes = [
     name: 'Orders',
     component: Orders,
     beforeEnter: [checkAuth],
+    children: [
+      {path: '/orders', component: AllOrders},
+      {path: '/orders/:id', component: ViewOrder },
+    ]
   },
   {
     path: '/Users',
@@ -144,6 +150,9 @@ async function checkAuth(to, from, next) {
         return next('/login')
       }
     } catch (e) {
+      if (e.code === "ERR_NETWORK") {
+        await store.dispatch('addNotification', 'Ошибка подключения к серверу.')
+      }
       return next('/login')
     }
   }
