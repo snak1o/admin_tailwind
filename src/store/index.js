@@ -8,6 +8,7 @@ export default createStore({
     images: [],
     notifications: [],
     host: process.env.NODE_ENV === "production" ? "VUE_API_URL"  : process.env.VUE_APP_API,
+    loading: false,
   },
   mutations: {
     setLayout(state, payload) {
@@ -24,7 +25,11 @@ export default createStore({
     },
     setLoggedIn(state, payload) {
       state.loggedIn = payload
-    }
+    },
+    setLoading(state, payload) {
+      state.loading = payload
+    },
+
   },
   getters: {
     layout(state) {
@@ -41,6 +46,9 @@ export default createStore({
     },
     host(state) {
       return state.host
+    },
+    loading(state) {
+      return state.loading
     }
   },
   actions: {
