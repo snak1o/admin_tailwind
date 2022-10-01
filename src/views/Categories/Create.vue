@@ -36,14 +36,14 @@ export default {
             imageId: this.selectedImage[0]
           })
           console.log(res)
-          if (res.status === 200) {
+          if (res.status === 201) {
             await store.dispatch('addNotification', `Категория ${this.name} создана успешно.`)
+            await this.$router.push('/categories')
           }
         }
       }catch (e) {
         await store.dispatch('addNotification', `Ошибка ${e.response.status}.`)
       }
-
     },
     validation() {
       if (this.name.trim() === "") {
