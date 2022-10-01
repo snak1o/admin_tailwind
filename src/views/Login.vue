@@ -74,19 +74,24 @@ export default {
             }
           }
         }catch (e) {
+          if (e.code === "ERR_NETWORK") {
+            await store.dispatch('addNotification', `Ошибка сервера.`)
+            return
+          }
           if (e.response) {
-            if (e.response.status === 404) {
-              await store.dispatch('addNotification', `Неправильный логин или пароль.`)
-            }
-            if (e.response.status === 500) {
-              await store.dispatch('addNotification', `Server error 500.`)
-            }
-            else {
-              await store.dispatch('addNotification', `Ошибка ${e.response.status}.`)
+            switch (e.response.status) {
+              case 404: {
+                await store.dispatch('addNotification', `Неправильный логин или пароль.`)
+                return
+              }
+              default: {
+                await store.dispatch('addNotification', `Ошибка ${e.response.status}.`)
+                return
+              }
             }
           }
           else {
-            await store.dispatch('addNotification', `Ошибка: ${e.message}.`)
+            await store.dispatch('addNotification', `Ошибка: ${e}.`)
           }
         }
       }
