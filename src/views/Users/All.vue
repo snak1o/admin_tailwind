@@ -40,16 +40,16 @@
           {{user.login}}
         </td>
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {{user.firstName ? user.firstName + " " + user.lastName : '-'}}
+          {{user.firstName ? user.firstName + " " + user.lastName : 'Не указано'}}
         </th>
         <td class="px-6 py-4">
           {{user.email}}
         </td>
         <td class="px-6 py-4">
-          {{user.phone ? "+" + user.phone : '-'}}
+          {{user.phone ? "+" + user.phone.phoneCode + user.phone.phoneNumber : 'Не указано'}}
         </td>
         <td class="px-6 py-4">
-          {{user.invoiceAddress ? user.invoiceAddress.street + " " + user.invoiceAddress.zip + " " + user.invoiceAddress.city : "-"}}
+          {{user.invoiceAddress ? user.invoiceAddress.street + " " + user.invoiceAddress.zip + " " + user.invoiceAddress.city +  " " + user.invoiceAddress.country : "Не указано"}}
         </td>
         <td class="px-6 py-4 text-right">
           <router-link :to="`/users/edit/${user.id}`" class="font-medium text-blue-600 hover:underline">Edit</router-link>
