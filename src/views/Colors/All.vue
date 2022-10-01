@@ -5,7 +5,7 @@
       <router-link class="text-green-700 text-md" to="/colors/create">+ Добавить новый</router-link>
     </div>
     <div class="grid grid-cols-4 mt-10 gap-10">
-      <div v-for="(color, index) in colors"  :key="color.id" class="px-3 pt-3 pb-2 rounded-md border border-gray-400 relative" :class="color.hex === '#ffffff' ? 'text-black' : 'text-white'" :style="{backgroundColor: color.hex}">
+      <div v-for="(color, index) in colors"  :key="color.id" class="px-3 pt-3 pb-2 rounded-md border border-gray-400 relative" :class="color.hex.toUpperCase() === '#FFFFFF'  ? 'text-black' : 'text-white'" :style="{backgroundColor: color.hex}">
         <p class="pb-10 text-xl">{{color.name}} ({{color.price}})</p>
         <div class="flex justify-between items-center">
             <span class="flex items-center">
