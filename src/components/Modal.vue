@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="w-screen h-screen bg-zinc-900/50 z-10 absolute top-0 left-0 flex justify-center items-center">
+  <div class="w-screen h-screen bg-zinc-900/50 z-10 absolute top-0 left-0 flex justify-center items-center">
     <div @click.stop class="flex flex-col bg-white rounded-md border px-10 py-5 relative">
       <h2 class="text-2xl mb-3">{{title}}</h2>
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute cursor-pointer top-2 right-2" viewBox="0 0 20 20" fill="currentColor" @click="$emit('close')">
@@ -14,10 +14,6 @@
 export default {
   name: "Modal",
   props: {
-    show: {
-      type: Boolean,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
